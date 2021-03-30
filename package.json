@@ -7,10 +7,13 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "leaflet": "^1.7.1",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-datepicker": "^3.6.0",
     "react-dom": "^17.0.2",
     "react-leaflet": "^3.1.0",
     "react-scripts": "4.0.3",
+    "use-fetch-cache": "^1.0.2",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

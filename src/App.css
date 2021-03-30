@@ -1,4 +1,64 @@
-.leaflet-container {
-  width: 100vw;
-  height: 100vh;
+body {
+
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+  font-family: 'Public Sans', sans-serif;
+  color: antiquewhite;
 }
+
+
+.leaflet-container {
+  width: 100%;
+  height: 80vh;
+  border: 2px solid teal;
+  margin: 20px;
+}
+
+.heading {
+  padding: 0 20px;
+  font-family: sans-serif;
+}
+
+
+.row {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-gap: 30px;
+}
+
+.date-field {
+  width: 330px;
+  margin: 0 10px;
+  font-size: 20px;
+}
+
+.datePicker input {
+  width: 12rem;
+  height: 1.6rem;
+  text-align: center;
+  font-family: 'Public Sans', sans-serif;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.datePicker input:active,
+.datePicker input:focus {
+  outline: none;
+  border: none;
+  transform: scale(1.1);
+  transition: all .2s ease-in-out;
+}
+
+.datePicker input:hover {
+  border: none;
+  outline: none;
+  transform: scale(1.1);
+  transition: all .2s ease-out;
+}
+
+.map-container {
+  border-radius: 5px;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+
+

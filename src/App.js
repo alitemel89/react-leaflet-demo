@@ -1,61 +1,89 @@
 import React from "react";
 import "./App.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Icon } from 'leaflet';
-import * as parkData from "./data/skateparks.json";
+import useSwr from "swr";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
-const skater = new Icon({
-  iconUrl: "/skateboarding.svg",
-  iconSize: [25, 25]
-})
+const fetcher = (...args) => fetch(...args).then((response) => response.json());
 
 function App() {
-  const [activePark, setActivePark] = React.useState(null);
-  console.log(activePark);
+  const [activeCrime, setActiveCrime] = React.useState(null);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+
+  const month = selectedDate.getMonth() + 1;
+  const year = selectedDate.getFullYear();
+  
+  const bicycleTheftUrl = `https://data.police.uk/api/crimes-street/bicycle-theft?lat=52.629729&lng=-1.131592&date=${year}-${month}`;
+
+  const { data, error } = useSwr(bicycleTheftUrl, { fetcher });
+
+  const crimes = data && !error ? data.slice(0, 20) : [];
+
   return (
     <>
-      <h1>React Leaflet Demo</h1>
-      <MapContainer center={[45.421532, -75.697189]} zoom={12}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {parkData.features.map((park) => {
-          return (
-            <Marker
-              key={park.properties.PARK_ID}
+      <h2 className="heading">Bicycle Theft Crimes</h2>
+
+      <div className="row">
+        <MapContainer center={[52.636256, -1.125933]} zoom={12} className="map-container">
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+
+          {crimes.map((crime) => {
+            return (
+              <Marker
+                key={crime.id}
+                position={[crime.location.latitude, crime.location.longitude]}
+                eventHandlers={{
+                  click: () => {
+                    setActiveCrime(crime);
+                  },
+                }}
+              />
+            );
+          })}
+
+          {activeCrime && (
+            <Popup
               position={[
-                park.geometry.coordinates[1],
-                park.geometry.coordinates[0],
+                activeCrime.location.latitude,
+                activeCrime.location.longitude,
               ]}
               eventHandlers={{
-                click: () => {
-                  setActivePark(park);
+                close: () => {
+                  setActiveCrime(null);
                 },
               }}
-              icon={skater}
-            />
-          );
-        })}
-        {activePark && (
-          <Popup
-            position={[
-              activePark.geometry.coordinates[1],
-              activePark.geometry.coordinates[0],
-            ]}
-            eventHandlers={{
-              close: () => {
-                setActivePark(null);
-              },
-            }}
-          >
-            <div>
-              <h2>{activePark.properties.NAME}</h2>
-              <p>{activePark.properties.DESCRIPTIO}</p>
-            </div>
-          </Popup>
-        )}
-      </MapContainer>
+            >
+              <div>
+                <h2>🚲 {activeCrime.category}</h2>
+                <p>{activeCrime.location.street.name}</p>
+                <p>{activeCrime.month}</p>
+              </div>
+            </Popup>
+          )}
+        </MapContainer>
+
+        <div className="date-field">
+          <p>
+            Please select a month to view bicycle-theft crime locations in
+            Leicester.
+          </p>
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="yyyy/MM"
+            maxDate={moment().toDate()}
+            wrapperClassName="datePicker"
+          />
+        </div>
+
+        
+      </div>
     </>
   );
 }
