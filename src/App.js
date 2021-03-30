@@ -1,8 +1,13 @@
 import React from "react";
 import "./App.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-
+import { Icon } from 'leaflet';
 import * as parkData from "./data/skateparks.json";
+
+const skater = new Icon({
+  iconUrl: "/skateboarding.svg",
+  iconSize: [25, 25]
+})
 
 function App() {
   const [activePark, setActivePark] = React.useState(null);
@@ -28,6 +33,7 @@ function App() {
                   setActivePark(park);
                 },
               }}
+              icon={skater}
             />
           );
         })}
