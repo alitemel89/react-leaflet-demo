@@ -1,39 +1,70 @@
-body {
+* {
+  margin: 0;
+  padding: 0;
+}
 
-  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: 100%;
+}
+
+
+body {
+  background: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
   font-family: 'Public Sans', sans-serif;
   color: antiquewhite;
 }
 
 
 .leaflet-container {
-  width: 100%;
-  height: 80vh;
+  width: 80vw;
+  height: 90vh;
   border: 2px solid teal;
-  margin: 20px;
+  margin: 1rem auto;
 }
 
 .heading {
-  padding: 0 20px;
+  padding: 1rem;
   font-family: sans-serif;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.heading-text {
+  width: 50%;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 
-.row {
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-gap: 30px;
+.map-container {
+  border-radius: 5px;
+  box-shadow: 1rem 1rem 5rem 0 rgba(0,0,0,0.75);
+  margin-bottom: 3rem;
 }
+
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+
 
 .date-field {
-  width: 330px;
-  margin: 0 10px;
-  font-size: 20px;
+  text-align: center;
 }
 
 .datePicker input {
   width: 12rem;
-  height: 1.6rem;
+  height: 2rem;
   text-align: center;
   font-family: 'Public Sans', sans-serif;
   border-radius: 5px;
@@ -41,24 +72,15 @@ body {
 }
 
 .datePicker input:active,
-.datePicker input:focus {
-  outline: none;
-  border: none;
-  transform: scale(1.1);
-  transition: all .2s ease-in-out;
-}
-
+.datePicker input:focus,
 .datePicker input:hover {
-  border: none;
   outline: none;
-  transform: scale(1.1);
-  transition: all .2s ease-out;
+  border: none;
+
 }
 
-.map-container {
-  border-radius: 5px;
-  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-}
+
+
 
 
 

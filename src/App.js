@@ -12,10 +12,9 @@ function App() {
   const [activeCrime, setActiveCrime] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
-
   const month = selectedDate.getMonth() + 1;
   const year = selectedDate.getFullYear();
-  
+
   const bicycleTheftUrl = `https://data.police.uk/api/crimes-street/bicycle-theft?lat=52.629729&lng=-1.131592&date=${year}-${month}`;
 
   const { data, error } = useSwr(bicycleTheftUrl, { fetcher });
@@ -24,66 +23,68 @@ function App() {
 
   return (
     <>
-      <h2 className="heading">Bicycle Theft Crimes</h2>
+      <header className="heading">
+        <h2>Bicycle Theft Crimes</h2>
+        <p className="heading-text">
+          Please select a month to view bicycle-theft crime locations in
+          Leicester.
+        </p>
+      </header>
 
-      <div className="row">
-        <MapContainer center={[52.636256, -1.125933]} zoom={12} className="map-container">
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+      <div className="date-field">
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          dateFormat="yyyy/MM"
+          maxDate={moment().toDate()}
+          wrapperClassName="datePicker"
+        />
+      </div>
 
-          {crimes.map((crime) => {
-            return (
-              <Marker
-                key={crime.id}
-                position={[crime.location.latitude, crime.location.longitude]}
-                eventHandlers={{
-                  click: () => {
-                    setActiveCrime(crime);
-                  },
-                }}
-              />
-            );
-          })}
+      <MapContainer
+        center={[52.636256, -1.125933]}
+        zoom={12}
+        className="map-container"
+      >
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-          {activeCrime && (
-            <Popup
-              position={[
-                activeCrime.location.latitude,
-                activeCrime.location.longitude,
-              ]}
+        {crimes.map((crime) => {
+          return (
+            <Marker
+              key={crime.id}
+              position={[crime.location.latitude, crime.location.longitude]}
               eventHandlers={{
-                close: () => {
-                  setActiveCrime(null);
+                click: () => {
+                  setActiveCrime(crime);
                 },
               }}
-            >
-              <div>
-                <h2>🚲 {activeCrime.category}</h2>
-                <p>{activeCrime.location.street.name}</p>
-                <p>{activeCrime.month}</p>
-              </div>
-            </Popup>
-          )}
-        </MapContainer>
+            />
+          );
+        })}
 
-        <div className="date-field">
-          <p>
-            Please select a month to view bicycle-theft crime locations in
-            Leicester.
-          </p>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="yyyy/MM"
-            maxDate={moment().toDate()}
-            wrapperClassName="datePicker"
-          />
-        </div>
-
-        
-      </div>
+        {activeCrime && (
+          <Popup
+            position={[
+              activeCrime.location.latitude,
+              activeCrime.location.longitude,
+            ]}
+            eventHandlers={{
+              close: () => {
+                setActiveCrime(null);
+              },
+            }}
+          >
+            <div>
+              <h2>🚲 {activeCrime.category}</h2>
+              <p>{activeCrime.location.street.name}</p>
+              <p>{activeCrime.month}</p>
+            </div>
+          </Popup>
+        )}
+      </MapContainer>
     </>
   );
 }
